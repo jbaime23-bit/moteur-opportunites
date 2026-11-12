@@ -7,6 +7,9 @@ import urllib.parse
 st.set_page_config(page_title="Portail Opportunités & Urgences", page_icon="🌍", layout="centered")
 st.title("🌍 Moteur IA : Emplois, Opportunités & Pharmacies")
 
+# Espace publicitaire / partenaire (modifiable à tout moment)
+st.info("📢 **Espace Partenaire :** Besoin d'un CV professionnel ou de promouvoir votre entreprise ici ? [Contactez-nous](https://wa.me)")
+
 # 2. Récupération sécurisée des clés depuis Streamlit Secrets
 TAVILY_API_KEY = st.secrets["TAVILY_API_KEY"]
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
@@ -79,7 +82,7 @@ if st.button("Lancer la recherche", type="primary"):
                 sources.append(f"[{index}] [{resultat['title']}]({resultat['url']})")
 
             reponse_ia = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=[
                     {"role": "system", "content": prompt_systeme},
                     {"role": "user", "content": f"Zone : {localisation}\nDemande : {requete_utilisateur}\n\nSources :\n{contexte}"}
