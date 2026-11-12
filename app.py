@@ -3,7 +3,7 @@ from tavily import TavilyClient
 from groq import Groq
 import urllib.parse
 
-# 1. Configuration de la page en mode large pour accueillir les côtés
+# 1. Configuration de la page en mode large pour afficher les côtés gauche et droit
 st.set_page_config(
     page_title="Portail IA : Emplois, Opportunités & Pharmacies",
     page_icon="🌍",
@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 2. Design CSS Moderne + Emplacements Publicitaires
+# 2. Design CSS Moderne + Emplacements Publicitaires Côtés et Bas
 st.markdown("""
 <style>
     /* Masquer les éléments par défaut de Streamlit */
@@ -28,32 +28,32 @@ st.markdown("""
     /* En-tête moderne */
     .hero-header {
         background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-        padding: 22px 18px;
+        padding: 25px 20px;
         border-radius: 15px;
         color: white;
         text-align: center;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     .hero-header h1 {
-        font-size: 1.55rem;
+        font-size: 1.6rem;
         font-weight: 700;
-        margin: 0 0 6px 0;
+        margin: 0 0 8px 0;
         color: #ffffff;
     }
     .hero-header p {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         margin: 0;
         color: #d1e8e2;
     }
 
-    /* Bannière principale TechLibrairie */
+    /* Bannière TechLibrairie en haut (conservée telle quelle) */
     .promo-banner {
         background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
         color: white;
         padding: 14px 18px;
         border-radius: 12px;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -72,57 +72,58 @@ st.markdown("""
         margin-left: 10px;
     }
 
-    /* Encarts Publicitaires Latéraux (Gauche et Droite) */
-    .side-ad {
+    /* Espaces Publicitaires Latéraux (Gauche et Droite) */
+    .side-ad-box {
         background-color: #ffffff;
         border: 2px dashed #cbd5e1;
         border-radius: 12px;
-        padding: 16px 12px;
+        padding: 20px 12px;
         text-align: center;
-        margin-bottom: 15px;
+        margin-top: 10px;
+        min-height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .side-ad h4 {
-        color: #1e293b;
-        font-size: 0.95rem;
-        margin: 0 0 6px 0;
-    }
-    .side-ad p {
-        color: #64748b;
-        font-size: 0.8rem;
-        margin: 0 0 10px 0;
-    }
-    .side-ad a {
-        display: inline-block;
-        background-color: #203a43;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 0.8rem;
+    .side-ad-box span {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
         font-weight: bold;
+        margin-bottom: 8px;
+    }
+    .side-ad-box p {
+        color: #475569;
+        font-size: 0.85rem;
+        margin: 0;
     }
 
-    /* Encart Publicitaire Bas de Page */
-    .bottom-ad {
-        background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
-        padding: 16px;
+    /* Espace Publicitaire Bas de Page */
+    .bottom-ad-box {
+        background-color: #ffffff;
+        border: 2px dashed #cbd5e1;
         border-radius: 12px;
+        padding: 18px;
         text-align: center;
-        margin-top: 25px;
-        box-shadow: 0 4px 12px rgba(30, 60, 114, 0.2);
+        margin-top: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .bottom-ad a {
-        display: inline-block;
-        margin-top: 8px;
-        background-color: #fbbf24;
-        color: #1e293b;
-        padding: 7px 16px;
-        border-radius: 8px;
-        text-decoration: none;
+    .bottom-ad-box span {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
         font-weight: bold;
-        font-size: 0.85rem;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .bottom-ad-box p {
+        color: #475569;
+        font-size: 0.9rem;
+        margin: 0;
     }
 
     /* Bouton de recherche principal */
@@ -157,29 +158,28 @@ GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 tavily = TavilyClient(api_key=TAVILY_API_KEY)
 groq_client = Groq(api_key=GROQ_API_KEY)
 
-# 4. Découpage en 3 colonnes : Côté Gauche | Centre (Moteur) | Côté Droit
-col_gauche, col_centre, col_droite = st.columns([1, 2.4, 1])
+# 4. Structure en 3 colonnes : Côté Gauche | Centre (Moteur) | Côté Droit
+col_gauche, col_centre, col_droite = st.columns([1, 2.5, 1])
 
-# --- COLONNE GAUCHE (Publicité latérale 1) ---
+# --- ESPACE PUBLICITAIRE GAUCHE ---
 with col_gauche:
     st.markdown("""
-    <div class="side-ad">
-        <h4>📘 Espace Pub Gauche</h4>
-        <p>Faites connaître vos formations, livres ou services ici.</p>
-        <a href="https://techlibrairie.com" target="_blank">Voir les offres</a>
+    <div class="side-ad-box">
+        <span>Publicité</span>
+        <p>Espace publicitaire disponible (Côté Gauche)</p>
     </div>
     """, unsafe_allow_html=True)
 
-# --- COLONNE CENTRALE (Moteur de recherche) ---
+# --- COLONNE CENTRALE (Moteur de recherche + Bannière TechLibrairie) ---
 with col_centre:
     st.markdown("""
     <div class="hero-header">
         <h1>🌍 Portail IA : Emplois & Urgences</h1>
-        <p>Offres d'emploi, financements et pharmacies de garde en temps réel.</p>
+        <p>Trouvez instantanément les offres d'emploi, financements et pharmacies de garde près de chez vous.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    # Bannière TechLibrairie en haut
+    # Bannière TechLibrairie conservée en haut
     st.markdown("""
     <div class="promo-banner">
         <div><strong>📚 TechLibrairie</strong><br>Guides techniques, livres numériques & ressources pro.</div>
@@ -187,8 +187,9 @@ with col_centre:
     </div>
     """, unsafe_allow_html=True)
 
-    c1, c2 = st.columns(2)
-    with c1:
+    col1, col2 = st.columns(2)
+
+    with col1:
         categorie = st.selectbox(
             "Catégorie de recherche",
             [
@@ -197,7 +198,8 @@ with col_centre:
                 "💊 Pharmacies de garde"
             ]
         )
-    with c2:
+
+    with col2:
         localisation = st.text_input("Ville ou Quartier", value="Ouagadougou", placeholder="Ex: Bobo-Dioulasso, Gounghin...")
 
     if categorie == "💊 Pharmacies de garde":
@@ -220,7 +222,7 @@ with col_centre:
                         "Tu es un assistant d'urgence médicale précis. À partir des sources fournies, "
                         "liste clairement les pharmacies de garde trouvées pour la zone demandée. "
                         "Pour chaque pharmacie, indique : le NOM exact, le QUARTIER/ADRESSE, et le NUMÉRO DE TÉLÉPHONE si disponible. "
-                        "Cite tes sources avec,, etc. Si la liste n'est pas à jour ou introuvable, précise-le clairement."
+                        "Cite tes sources avec, [2], etc. Si la liste n'est pas à jour ou introuvable, précise-le clairement."
                     )
                 elif categorie == "💼 Offres d'emploi & Recrutements":
                     requete_finale = f"offre emploi recrutement {requete_utilisateur} {localisation} date limite"
@@ -228,14 +230,14 @@ with col_centre:
                         "Tu es un chasseur de têtes et conseiller en emploi. À partir des sources fournies, "
                         "présente les offres d'emploi pertinentes sous forme de liste claire : "
                         "Intitulé du poste, Entreprise/Structure, Lieu, et Date limite de candidature. "
-                        "Cite toujours les liens sources avec,, etc."
+                        "Cite toujours les liens sources avec, [2], etc."
                     )
                 else:
                     requete_finale = f"opportunité financement bourse appel d'offres {requete_utilisateur} {localisation}"
                     prompt_systeme = (
                         "Tu es un expert en veille stratégique et opportunités. Résume les bourses, subventions ou "
                         "appels d'offres trouvés en précisant : le Titre, l'Organisme, les Conditions principales et la Date limite. "
-                        "Cite toujours tes sources avec,, etc."
+                        "Cite toujours tes sources avec, [2], etc."
                     )
 
                 resultats_web = tavily.search(query=requete_finale, search_depth="advanced", max_results=6)
@@ -256,7 +258,7 @@ with col_centre:
                 )
 
                 st.markdown("### 📋 Résultats trouvés")
-                st.markdown(f'<div class="result-card">{reponse_ia.choices.message.content}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-card">{reponse_ia.choices[0].message.content}</div>', unsafe_allow_html=True)
 
                 if categorie == "💊 Pharmacies de garde":
                     terme_carte = f"Pharmacie {requete_utilisateur} {localisation}".strip()
@@ -269,5 +271,4 @@ with col_centre:
                         st.markdown(f"- {source}")
 
             except Exception as e:
-                st.error(f"Erreur lors de la recherche : {e}")
-
+                
