@@ -23,7 +23,6 @@ st.markdown("""
     .promo-banner {background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%); color: white; padding: 14px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;}
     .promo-banner a {background-color: white; color: #ff5e62; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.85rem;}
     .side-ad-box {background-color: #ffffff; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px 12px; text-align: center; min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center;}
-    .bottom-ad-box {background-color: #ffffff; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px; text-align: center; margin-top: 30px;}
     .stButton > button {width: 100%; background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%); color: white; font-weight: bold; border: none; padding: 12px 20px; border-radius: 10px;}
     .result-card {background-color: white; padding: 20px; border-radius: 12px; border-left: 5px solid #00b09b; margin-top: 15px;}
 </style>
@@ -32,9 +31,7 @@ st.markdown("""
 tavily = TavilyClient(api_key=st.secrets["TAVILY_API_KEY"])
 groq_client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-col_gauche, col_centre, col_droite = st.columns([1, 2.5, 1])
-
-col_gauche.markdown('<div class="side-ad-box"><b>PUBLICITÉ</b><br><br>Espace publicitaire disponible (Côté Gauche)</div>', unsafe_allow_html=True)
+col_centre, col_droite = st.columns([2.5, 1])
 
 col_droite.markdown('<div class="side-ad-box"><b>PUBLICITÉ</b><br><br>Espace publicitaire disponible (Côté Droit)</div>', unsafe_allow_html=True)
 
@@ -94,5 +91,4 @@ with col_centre:
 
             except Exception as e:
                 st.error(f"Erreur lors de la recherche : {e}")
-
-st.markdown('<div class="bottom-ad-box"><b>PUBLICITÉ</b><br>Espace publicitaire disponible (Bas de page)</div>', unsafe_allow_html=True)
+                
