@@ -7,8 +7,8 @@ import urllib.parse
 st.set_page_config(page_title="Portail Opportunités & Urgences", page_icon="🌍", layout="centered")
 st.title("🌍 Moteur IA : Emplois, Opportunités & Pharmacies")
 
-# Espace publicitaire / partenaire (modifiable à tout moment)
-st.info("📢 **Espace Partenaire :** Besoin d'un CV professionnel ou de promouvoir votre entreprise ici ? [Contactez-nous](https://wa.me)")
+# Encart publicitaire TechLibrairie
+st.info("📚 **TechLibrairie** : Découvrez nos livres, ressources numériques et équipements tech ! [Visiter TechLibrairie](https://techlibrairie.com)")
 
 # 2. Récupération sécurisée des clés depuis Streamlit Secrets
 TAVILY_API_KEY = st.secrets["TAVILY_API_KEY"]
@@ -36,8 +36,8 @@ with col2:
 # 4. Champ de recherche spécifique
 if categorie == "💊 Pharmacies de garde":
     requete_utilisateur = st.text_input(
-        "Précisez votre besoin (optionnel) :",
-        placeholder="Ex: pharmacie ouverte maintenant près de Gounghin"
+        "Nom de la pharmacie ou précision (optionnel) :",
+        placeholder="Ex: Pharmacie du Progrès, Gounghin..."
     )
 else:
     requete_utilisateur = st.text_input(
@@ -93,10 +93,11 @@ if st.button("Lancer la recherche", type="primary"):
             st.markdown("### 📋 Résultats de la recherche")
             st.write(reponse_ia.choices[0].message.content)
 
-            if categorie == "💊 Pharmacies de garde" and localisation:
-                query_maps = urllib.parse.quote(f"Pharmacie {requete_utilisateur} {localisation}")
+            if categorie == "💊 Pharmacies de garde":
+                terme_carte = f"Pharmacie {requete_utilisateur} {localisation}".strip()
+                query_maps = urllib.parse.quote_plus(terme_carte)
                 lien_maps = f"https://google.com{query_maps}"
-                st.link_button("📍 Voir les pharmacies sur la carte (Google Maps)", lien_maps)
+                st.markdown(f"📍 **[Ouvrir la localisation sur Google Maps]({lien_maps})**")
 
             with st.expander("🔗 Voir les sources officielles consultées"):
                 for source in sources:
@@ -104,4 +105,4 @@ if st.button("Lancer la recherche", type="primary"):
 
         except Exception as e:
             st.error(f"Erreur lors de la recherche : {e}")
-            
+                                             
